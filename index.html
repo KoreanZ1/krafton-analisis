@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRAFTON · Dossier de Inversión · Mayo 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0a0e1a; --bg2:#111728; --bg3:#1a2238; --card:#141b2d;
+  --line:#243049; --text:#e8edf7; --muted:#8a95ac;
+  --accent:#ff7a1a; --accent2:#ffb347; --green:#22c55e; --red:#ef4444;
+  --blue:#3b82f6; --purple:#a855f7; --yellow:#eab308;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;font-size:15px}
+.container{max-width:1280px;margin:0 auto;padding:24px}
+header{background:linear-gradient(135deg,#1a1108 0%,#0a0e1a 60%);border-bottom:2px solid var(--accent);padding:36px 0 28px}
+header .container{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px}
+.brand{display:flex;align-items:center;gap:18px}
+.logo{width:64px;height:64px;background:linear-gradient(135deg,#ff7a1a,#ffb347);border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:26px;color:#0a0e1a;box-shadow:0 6px 24px rgba(255,122,26,.35)}
+h1{font-size:30px;font-weight:800;letter-spacing:-.5px}
+.subtitle{color:var(--muted);font-size:14px;margin-top:4px}
+.live{display:flex;gap:14px;flex-wrap:wrap}
+.live-item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:13px}
+.live-item .v{color:var(--accent2);font-weight:700;font-size:16px}
+.live-item.green .v{color:var(--green)}
+.live-item.red .v{color:var(--red)}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(10,14,26,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:14px 0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.tab{background:var(--card);border:1px solid var(--line);color:var(--muted);padding:10px 18px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;font-family:inherit}
+.tab:hover{border-color:var(--accent);color:var(--text);transform:translateY(-1px)}
+.tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e1a;border-color:var(--accent)}
+
+section{display:none;padding:36px 0;animation:fade .4s}
+section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+h2{font-size:24px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+h2::before{content:"";width:5px;height:26px;background:var(--accent);border-radius:3px}
+h3{font-size:18px;font-weight:700;margin:22px 0 10px;color:var(--accent2)}
+h4{font-size:15px;font-weight:700;margin:14px 0 6px;color:var(--text)}
+p{margin-bottom:10px;color:#cdd5e7}
+.lead{font-size:15px;color:var(--muted);margin-bottom:24px;max-width:900px}
+
+.grid{display:grid;gap:18px}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.grid-4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;transition:all .2s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card.accent{border-left:4px solid var(--accent)}
+.card.green{border-left:4px solid var(--green)}
+.card.red{border-left:4px solid var(--red)}
+.card.blue{border-left:4px solid var(--blue)}
+.card.purple{border-left:4px solid var(--purple)}
+.card.yellow{border-left:4px solid var(--yellow)}
+
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center}
+.kpi .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.kpi .value{font-size:24px;font-weight:800;color:var(--accent2)}
+.kpi .delta{font-size:12px;margin-top:4px}
+.kpi .delta.up{color:var(--green)}
+.kpi .delta.down{color:var(--red)}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:var(--bg3);color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+tr:hover td{background:rgba(255,122,26,.04)}
+td.num{font-variant-numeric:tabular-nums;text-align:right}
+.tag{display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.tag.green{background:rgba(34,197,94,.18);color:#4ade80}
+.tag.red{background:rgba(239,68,68,.18);color:#f87171}
+.tag.yellow{background:rgba(234,179,8,.18);color:#facc15}
+.tag.blue{background:rgba(59,130,246,.18);color:#60a5fa}
+.tag.orange{background:rgba(255,122,26,.18);color:var(--accent2)}
+
+.chart-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:18px 0;height:380px;position:relative}
+.chart-box canvas{max-height:330px}
+
+.alert{background:rgba(255,122,26,.08);border:1px solid var(--accent);border-radius:10px;padding:14px 18px;margin:14px 0;font-size:14px}
+.alert.green{background:rgba(34,197,94,.08);border-color:var(--green)}
+.alert.red{background:rgba(239,68,68,.08);border-color:var(--red)}
+.alert.blue{background:rgba(59,130,246,.08);border-color:var(--blue)}
+.alert strong{color:var(--accent2)}
+.alert.green strong{color:#4ade80}
+.alert.red strong{color:#f87171}
+.alert.blue strong{color:#60a5fa}
+
+ul.bul{list-style:none;padding-left:0}
+ul.bul li{padding:6px 0 6px 22px;position:relative;color:#cdd5e7}
+ul.bul li::before{content:"▸";position:absolute;left:0;color:var(--accent);font-weight:bold}
+
+.score-bar{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin:6px 0}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .8s}
+
+footer{border-top:1px solid var(--line);padding:30px 0;margin-top:50px;text-align:center;color:var(--muted);font-size:12px}
+footer a{color:var(--accent2);text-decoration:none}
+.disclaimer{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:14px 18px;margin:20px 0;font-size:12px;color:#cdd5e7}
+
+@media(max-width:720px){
+  h1{font-size:22px}.tab{padding:8px 12px;font-size:12px}
+  .live-item{font-size:11px;padding:6px 10px}
+  header .container{align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="brand">
+      <div class="logo">K</div>
+      <div>
+        <h1>KRAFTON · Dossier de Inversión</h1>
+        <div class="subtitle">KRX:259960 · KOSPI · Análisis fundamental, técnico y tesis · Mayo 2026</div>
+      </div>
+    </div>
+    <div class="live">
+      <div class="live-item"><div style="font-size:10px;color:var(--muted)">PRECIO</div><div class="v">285.000 ₩</div></div>
+      <div class="live-item green"><div style="font-size:10px;color:var(--muted)">DÍA</div><div class="v">+4,21%</div></div>
+      <div class="live-item"><div style="font-size:10px;color:var(--muted)">MKT CAP</div><div class="v">12,93 T₩</div></div>
+      <div class="live-item green"><div style="font-size:10px;color:var(--muted)">TARGET MEDIO</div><div class="v">435.074 ₩</div></div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="container">
+    <div class="tabs">
+      <button class="tab active" data-tab="empresa">1 · La Empresa</button>
+      <button class="tab" data-tab="negocio">2 · Negocio & Juegos</button>
+      <button class="tab" data-tab="subnautica">3 · Tesis Corto · Subnautica 2</button>
+      <button class="tab" data-tab="macro">4 · Corea & Macro</button>
+      <button class="tab" data-tab="fundamental">5 · Fundamental</button>
+      <button class="tab" data-tab="tecnico">6 · Técnico</button>
+      <button class="tab" data-tab="tesis">7 · Tesis de Inversión</button>
+      <button class="tab" data-tab="timing">8 · Timing & Niveles</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ============ 1 EMPRESA ============ -->
+<section id="empresa" class="active">
+  <h2>¿Quién es KRAFTON?</h2>
+  <p class="lead">KRAFTON, Inc. es una compañía surcoreana de videojuegos cotizada en KOSPI (KRX:259960). Empresa-holding con varios estudios bajo el paraguas — entre ellos <strong>PUBG Studios</strong>, creadora del battle royale moderno con <em>PUBG: Battlegrounds</em>. Fundada en 2007 (Bluehole), salió a bolsa en agosto de 2021 en la mayor OPV tech coreana hasta la fecha (~5.500M$).</p>
+
+  <div class="grid grid-4">
+    <div class="kpi"><div class="label">Sede</div><div class="value" style="font-size:18px">Seongnam, KR</div></div>
+    <div class="kpi"><div class="label">CEO</div><div class="value" style="font-size:18px">Changhan Kim</div></div>
+    <div class="kpi"><div class="label">Empleados</div><div class="value">~2.000</div></div>
+    <div class="kpi"><div class="label">Ticker</div><div class="value">259960</div></div>
+  </div>
+
+  <div class="grid grid-2" style="margin-top:20px">
+    <div class="card accent">
+      <h3>Estructura de estudios</h3>
+      <ul class="bul">
+        <li><strong>PUBG Studios</strong> — Battlegrounds, núcleo del negocio</li>
+        <li><strong>Bluehole Studio</strong> — proyectos MMORPG (TERA legacy)</li>
+        <li><strong>Striking Distance Studios</strong> — The Callisto Protocol</li>
+        <li><strong>RisingWings</strong> — móvil casual</li>
+        <li><strong>Unknown Worlds</strong> — Subnautica (adq. 2021, ~500M$, +earnout vigente)</li>
+        <li><strong>Dreamotion / 5minlab / Neon Giant</strong> — apuestas independientes</li>
+      </ul>
+    </div>
+    <div class="card blue">
+      <h3>Hitos clave</h3>
+      <ul class="bul">
+        <li><strong>2017</strong> — PUBG inventa el battle royale como categoría</li>
+        <li><strong>2018-19</strong> — Joint venture con Tencent para PUBG Mobile / Game for Peace (China)</li>
+        <li><strong>2021</strong> — OPV en KOSPI (498.000 ₩); adq. Unknown Worlds</li>
+        <li><strong>2024</strong> — Pipeline "30 juegos para 2026"; pivote a publisher global</li>
+        <li><strong>2025</strong> — inZOI Early Access (Mar); crisis legal Unknown Worlds (Jul)</li>
+        <li><strong>2026</strong> — Q1 récord (+57% YoY); Subnautica 2 EA <strong>14 mayo</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert blue" style="margin-top:20px">
+    <strong>Tesis en una línea:</strong> Empresa con una mina de oro (PUBG) que sigue creciendo a doble dígito ocho años después de su lanzamiento, balance limpio (4,3 T₩ caja neta), valoración barata (EV/EBITDA ~7x, fwd P/E ~11x) y un catalizador inminente — Subnautica 2 Early Access en 3 días.
+  </div>
+</section>
+
+<!-- ============ 2 NEGOCIO ============ -->
+<section id="negocio">
+  <h2>Negocio, Juegos y Solvencia de Títulos</h2>
+  <p class="lead">El negocio sigue siendo asimétrico: PUBG en sus diversas plataformas factura más del 80% del grupo. Q1 2026 marca un hito histórico: el franchise PUBG superó por primera vez 1 billón de wones en un único trimestre.</p>
+
+  <h3>Mix de ingresos Q1 2026 (% del total · 1,37 T₩)</h3>
+  <div class="chart-box"><canvas id="mixChart"></canvas></div>
+
+  <h3>Cartera de títulos · "solvencia financiera" por juego</h3>
+  <table>
+    <thead><tr><th>Título</th><th>Plataforma</th><th>Estado</th><th class="num">Ingresos (est.)</th><th>Tendencia</th></tr></thead>
+    <tbody>
+      <tr><td><strong>PUBG: Battlegrounds (PC/Console)</strong></td><td>PC + Xbox/PS</td><td><span class="tag green">Live · 8 años</span></td><td class="num">363,9 B₩ Q1 (+12,5% YoY)</td><td>↗ modo Xeno Point récord usuarios</td></tr>
+      <tr><td><strong>PUBG Mobile (global)</strong></td><td>Móvil</td><td><span class="tag green">Live</span></td><td class="num" rowspan="1">702,7 B₩ Q1 (+32% YoY)</td><td>↗ contenido recurrente</td></tr>
+      <tr><td><strong>BGMI (India)</strong></td><td>Móvil</td><td><span class="tag green">Live</span></td><td class="num">(incluido en mobile)</td><td>↗↗ catalizador estructural</td></tr>
+      <tr><td><strong>Game for Peace (China)</strong></td><td>Móvil</td><td><span class="tag green">Live · Tencent</span></td><td class="num">Royalty (alto margen)</td><td>→ estable</td></tr>
+      <tr><td><strong>inZOI</strong></td><td>PC EA</td><td><span class="tag yellow">Early Access · Mar 2025</span></td><td class="num">Aporta a "Otros"</td><td>↗ rival directo de The Sims</td></tr>
+      <tr><td><strong>The Callisto Protocol</strong></td><td>PC/Console</td><td><span class="tag red">Comercialmente fallido</span></td><td class="num">Bajo</td><td>↓ amortizado</td></tr>
+      <tr><td><strong>Subnautica 2</strong></td><td>PC/Xbox</td><td><span class="tag orange">EA · 14 May 2026</span></td><td class="num">29,99$ · EA 2-3 años</td><td>★ catalizador inmediato</td></tr>
+      <tr><td><strong>Dinkum Together</strong></td><td>PC</td><td><span class="tag blue">2026</span></td><td class="num">—</td><td>Cozy multiplayer</td></tr>
+      <tr><td><strong>Palworld Mobile</strong></td><td>Móvil</td><td><span class="tag blue">Pipeline</span></td><td class="num">—</td><td>IP viral</td></tr>
+      <tr><td><strong>NO LAW · Project ZETA</strong></td><td>Multi</td><td><span class="tag blue">Pipeline</span></td><td class="num">—</td><td>Diversificación</td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert">
+    <strong>Lectura:</strong> el pipeline es 26 proyectos, con 12 lanzamientos previstos en 24 meses. La estrategia "AI-First" (oct 2025) busca recortar coste de producción y acelerar ciclos. Riesgo: dependencia extrema de PUBG → cada nuevo IP exitoso es opcionalidad pura.
+  </div>
+
+  <h3>Evolución ingresos anuales (B₩)</h3>
+  <div class="chart-box"><canvas id="revChart"></canvas></div>
+</section>
+
+<!-- ============ 3 SUBNAUTICA ============ -->
+<section id="subnautica">
+  <h2>Tesis a Corto Plazo · Subnautica 2</h2>
+  <p class="lead">Catalizador binario y datable: <strong>Early Access el 14 de mayo de 2026</strong>, 3 días desde hoy (11 May). PC + Xbox Series, precio 29,99 USD. El primer Subnautica (2018) vendió >12 millones de copias; la base instalada de la IP es enorme y el hype acumulado tras el drama legal es máximo.</p>
+
+  <div class="grid grid-3">
+    <div class="card green">
+      <h3>Tailwinds</h3>
+      <ul class="bul">
+        <li>Wishlists Steam top-10 categoría supervivencia</li>
+        <li>Primer multijugador cooperativo (hasta 4) de la saga — expande TAM</li>
+        <li>Day-one en Xbox Game Pass (deal con Krafton)</li>
+        <li>Precio agresivo 29,99$ vs. 39,99-49,99$ comparables</li>
+        <li>EA largo (2-3 años) = monetización continuada estilo Valheim/Hades</li>
+      </ul>
+    </div>
+    <div class="card red">
+      <h3>Riesgos</h3>
+      <ul class="bul">
+        <li>Disputa legal: el juez determinó que Krafton incumplió el EPA al despedir a los fundadores; earnout 250M$ extendido hasta sept 2026 (mar 2027 opcional)</li>
+        <li>Founder backlash en comunidad — review-bombing posible al lanzamiento</li>
+        <li>Nuevo liderazgo (Steve Papoutsis) sin track récord en survival/sandbox</li>
+        <li>Multijugador añade complejidad técnica → bugs día 1</li>
+      </ul>
+    </div>
+    <div class="card accent">
+      <h3>Escenarios numéricos</h3>
+      <ul class="bul">
+        <li><strong>Base:</strong> 2M copias en 6 meses × 25$ neto ≈ 50M$ (mejora margen)</li>
+        <li><strong>Bull:</strong> 4-5M copias + DLC roadmap ≈ 120M$ + reset del múltiplo</li>
+        <li><strong>Bear:</strong> Review bombing, &lt;800k copias, ruido legal continuado</li>
+        <li><strong>Impacto en P&L 2026:</strong> +3-8% revenue grupo en escenario base/bull</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert" style="margin-top:18px">
+    <strong>Operativa sugerida:</strong> Subnautica 2 es un evento, no una tesis. Si entras por este catalizador, define stop antes del lanzamiento. El mercado ya descuenta el día 1 — lo que mueve la cotización serán los <em>concurrent peak Steam</em> el día 14-15 y la <em>review score</em> (umbral psicológico 80% positive en Steam) en las semanas siguientes.
+  </div>
+
+  <h3>Cronología del drama legal Unknown Worlds — para contexto</h3>
+  <table>
+    <thead><tr><th>Fecha</th><th>Evento</th><th>Implicación</th></tr></thead>
+    <tbody>
+      <tr><td>2021</td><td>Krafton adquiere Unknown Worlds por ~500M$ + earnout 250M$</td><td>Earnout ligado a lanzamiento timely</td></tr>
+      <tr><td>Jul 2025</td><td>Krafton despide a Ted Gill (CEO), Charlie Cleveland y Max McGuire (cofundadores)</td><td>Sustituye por Steve Papoutsis</td></tr>
+      <tr><td>Ago-Dic 2025</td><td>Demandas cruzadas; Krafton alega "abandono de funciones"</td><td>Riesgo reputacional</td></tr>
+      <tr><td>Mar 2026</td><td>Juez determina ruptura del EPA por parte de Krafton</td><td>Reactiva earnout 250M$ hasta sept 2026 (extendible a mar 2027)</td></tr>
+      <tr><td>Abr 2026</td><td>Confirmación EA 14 mayo · co-publishing con Unknown Worlds restaurado</td><td>Resolución parcial</td></tr>
+      <tr><td><strong>14 May 2026</strong></td><td><strong>EA Launch</strong></td><td><strong>Catalizador</strong></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 4 MACRO ============ -->
+<section id="macro">
+  <h2>Corea del Sur y Momento Macro</h2>
+  <p class="lead">El contexto coreano hoy (11 mayo 2026) es excepcionalmente alcista a nivel índice, pero con tensiones internas: KOSPI en máximos históricos por la euforia del ciclo IA/semiconductores, won débil y BoK girando a tono hawkish.</p>
+
+  <div class="grid grid-4">
+    <div class="kpi"><div class="label">KOSPI</div><div class="value">7.822</div><div class="delta up">+4,32% hoy · récord histórico</div></div>
+    <div class="kpi"><div class="label">BoK rate</div><div class="value">2,50%</div><div class="delta">7ª reunión sin tocar · sesgo hawkish</div></div>
+    <div class="kpi"><div class="label">USD/KRW</div><div class="value">1.462</div><div class="delta down">Won débil (-2m máximos)</div></div>
+    <div class="kpi"><div class="label">JPM target KOSPI</div><div class="value">10.000</div><div class="delta up">+25% upside (rally IA)</div></div>
+  </div>
+
+  <div class="grid grid-2" style="margin-top:20px">
+    <div class="card blue">
+      <h3>Vientos a favor</h3>
+      <ul class="bul">
+        <li><strong>KOSPI en récord (7.822)</strong> tras +4,32% hoy: liquidez doméstica + flujos extranjeros buscando exposición IA Asia</li>
+        <li><strong>Won débil (USD/KRW 1.462)</strong>: Krafton factura ~70-80% en USD/INR/EUR fuera de Corea → traducción FX positiva</li>
+        <li><strong>Cobertura analista coreana</strong>: 27 analistas, consensus Buy, target medio 435.074 ₩</li>
+        <li><strong>JPMorgan</strong> ve hasta 10.000 puntos KOSPI por rally IA — Krafton se beneficia indirectamente (sector tech)</li>
+      </ul>
+    </div>
+    <div class="card yellow">
+      <h3>Vientos en contra</h3>
+      <ul class="bul">
+        <li><strong>BoK hawkish</strong>: Ryoo Sangdai (Senior Deputy) dijo el 4 mayo que "es hora de considerar subir tipos". Krafton no está endeudada → impacto financiero bajo, pero sí en múltiplo del mercado</li>
+        <li><strong>Riesgo geopolítico</strong>: tensiones US-Irán moviendo crudo y aversión al riesgo en Asia (won débil refleja parte de esto)</li>
+        <li><strong>Concentración del rally en semiconductores</strong>: Samsung/SK Hynix arrastran el índice → posible rotación deja atrás a tech non-AI</li>
+        <li><strong>India regulatorio</strong>: BGMI siempre vive con riesgo de ban (precedente 2022)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Evolución KOSPI vs Krafton (rebased 100)</h3>
+  <div class="chart-box"><canvas id="macroChart"></canvas></div>
+</section>
+
+<!-- ============ 5 FUNDAMENTAL ============ -->
+<section id="fundamental">
+  <h2>Análisis Fundamental</h2>
+  <p class="lead">El balance es una fortaleza: 4,3 T₩ en caja, prácticamente sin deuda (35 B₩), equity 7,2 T₩. La cuenta de resultados, tras un 2023-24 de cierta normalización, ha vuelto en Q1 2026 al modo de aceleración: +57% YoY revenue, +23% operativa, +38% neto.</p>
+
+  <div class="grid grid-4">
+    <div class="kpi"><div class="label">Revenue Q1 2026</div><div class="value">1,37 T₩</div><div class="delta up">+57% YoY</div></div>
+    <div class="kpi"><div class="label">Operating Profit Q1</div><div class="value">561,6 B₩</div><div class="delta up">+23% YoY · 41% margen</div></div>
+    <div class="kpi"><div class="label">Net Income Q1</div><div class="value">514,1 B₩</div><div class="delta up">+38% YoY</div></div>
+    <div class="kpi"><div class="label">Revenue 2025 (FY)</div><div class="value">3,33 T₩</div><div class="delta">OP FY: 1,05 T₩</div></div>
+  </div>
+
+  <h3>Múltiplos de valoración</h3>
+  <table>
+    <thead><tr><th>Métrica</th><th class="num">Krafton</th><th class="num">Mediana industria</th><th>Lectura</th></tr></thead>
+    <tbody>
+      <tr><td>P/E TTM</td><td class="num">14,5x</td><td class="num">~20x</td><td><span class="tag green">Barato</span></td></tr>
+      <tr><td>Forward P/E</td><td class="num">10,9x</td><td class="num">~18x</td><td><span class="tag green">Muy barato</span></td></tr>
+      <tr><td>EV/EBITDA</td><td class="num">6,98x</td><td class="num">10-11x</td><td><span class="tag green">Descuento ~35%</span></td></tr>
+      <tr><td>EV/FCF</td><td class="num">8,52x</td><td class="num">~15x</td><td><span class="tag green">Generador de caja</span></td></tr>
+      <tr><td>P/Book</td><td class="num">~1,8x</td><td class="num">~3x</td><td><span class="tag green">Bajo</span></td></tr>
+      <tr><td>ROE</td><td class="num">10,5%</td><td class="num">~12%</td><td><span class="tag yellow">En línea</span></td></tr>
+      <tr><td>ROIC</td><td class="num">17,8%</td><td class="num">~10%</td><td><span class="tag green">Excelente</span></td></tr>
+      <tr><td>Margen operativo</td><td class="num">~32% (FY25) · 41% (Q1)</td><td class="num">~20%</td><td><span class="tag green">Premium</span></td></tr>
+      <tr><td>Deuda/Equity</td><td class="num">0,5%</td><td class="num">~25%</td><td><span class="tag green">Net cash</span></td></tr>
+      <tr><td>Dividend yield</td><td class="num">0,97%</td><td class="num">~1%</td><td><span class="tag yellow">Token</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Balance · solidez patrimonial</h3>
+  <div class="grid grid-3">
+    <div class="card green">
+      <h4>Caja & equivalentes</h4>
+      <p style="font-size:24px;font-weight:800;color:var(--green)">4.341 B₩</p>
+      <p style="font-size:12px;color:var(--muted)">~34% del market cap actual</p>
+    </div>
+    <div class="card green">
+      <h4>Deuda total</h4>
+      <p style="font-size:24px;font-weight:800;color:var(--green)">35 B₩</p>
+      <p style="font-size:12px;color:var(--muted)">Net cash position: +4.306 B₩</p>
+    </div>
+    <div class="card blue">
+      <h4>Equity</h4>
+      <p style="font-size:24px;font-weight:800;color:var(--blue)">7.194 B₩</p>
+      <p style="font-size:12px;color:var(--muted)">Activos totales: 8.347 B₩</p>
+    </div>
+  </div>
+
+  <h3>Consenso analistas (27 cubriendo)</h3>
+  <div class="chart-box" style="height:260px"><canvas id="analystChart"></canvas></div>
+
+  <div class="alert green" style="margin-top:18px">
+    <strong>Conclusión fundamental:</strong> calidad de balance excepcional, márgenes premium (32-41%) y múltiplos bajos vs. industria. La pregunta no es <em>si</em> está barata, es <em>por qué</em> — y la respuesta son tres descuentos aplicados: (1) <strong>Korea discount</strong>, (2) <strong>concentración PUBG</strong>, (3) <strong>ruido Unknown Worlds</strong>. Cualquiera de los tres se relaja → re-rating.
+  </div>
+</section>
+
+<!-- ============ 6 TECNICO ============ -->
+<section id="tecnico">
+  <h2>Análisis Técnico</h2>
+  <p class="lead">El gráfico de 12 meses muestra un rango amplio (208.500 - 391.000 ₩) con la cotización actualmente en la mitad inferior. El stock viene de hacer suelo entre 240-260k y está intentando romper al alza apoyado por el rally KOSPI.</p>
+
+  <div class="grid grid-4">
+    <div class="kpi"><div class="label">Precio cierre</div><div class="value">285.000</div><div class="delta up">+4,21% · 11 May 2026</div></div>
+    <div class="kpi"><div class="label">52w High</div><div class="value">391.000</div><div class="delta down">-27,1% desde máx</div></div>
+    <div class="kpi"><div class="label">52w Low</div><div class="value">208.500</div><div class="delta up">+36,7% sobre mín</div></div>
+    <div class="kpi"><div class="label">Previous close</div><div class="value" style="font-size:18px">273.500 ₩</div><div class="delta">Día: 270.500 / 288.000</div></div>
+  </div>
+
+  <h3>Niveles clave operativos</h3>
+  <table>
+    <thead><tr><th>Tipo</th><th class="num">Nivel (₩)</th><th>Significado</th><th>Acción</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag red">R3</span></td><td class="num">391.000</td><td>Máximo 52w</td><td>Toma de beneficios fuerte</td></tr>
+      <tr><td><span class="tag red">R2</span></td><td class="num">340.000</td><td>Resistencia intermedia (zona analista bajista)</td><td>TP parcial 50%</td></tr>
+      <tr><td><span class="tag yellow">R1</span></td><td class="num">310.000</td><td>Próxima resistencia / target bajo consenso</td><td>TP parcial 25%</td></tr>
+      <tr><td><span class="tag orange">Precio</span></td><td class="num">284.000</td><td>Cierre actual</td><td>—</td></tr>
+      <tr><td><span class="tag green">S1</span></td><td class="num">270.000</td><td>Soporte intradía / MA50 aprox</td><td>Zona compra escalonada</td></tr>
+      <tr><td><span class="tag green">S2</span></td><td class="num">245.000</td><td>Acumulación volumen (soporte fuerte)</td><td>Compra agresiva</td></tr>
+      <tr><td><span class="tag green">S3</span></td><td class="num">208.500</td><td>Mínimo 52w</td><td>Stop loss estructural</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Señales técnicas (síntesis)</h3>
+  <div class="grid grid-3">
+    <div class="card yellow">
+      <h4>Medias móviles</h4>
+      <p><span class="tag red">Sell</span> MA corta y larga muestran señal vendedora — la MA larga aún por encima de la corta (death cross legacy).</p>
+      <p style="margin-top:6px;font-size:13px;color:var(--muted)">Pero el rebote desde 240k está acercando la corta. Cruce alcista probable si supera 295k con volumen.</p>
+    </div>
+    <div class="card green">
+      <h4>MACD (3 meses)</h4>
+      <p><span class="tag green">Buy</span> MACD 3M cruce alcista — divergencia positiva tras el suelo de marzo-abril.</p>
+      <p style="margin-top:6px;font-size:13px;color:var(--muted)">Coincide con el catalizador Subnautica 2 → confluencia técnica + fundamental.</p>
+    </div>
+    <div class="card blue">
+      <h4>Momento global</h4>
+      <p><span class="tag yellow">Hold → Buy</span> Stockinvest upgrade de Sell a Hold. Pendiente confirmación.</p>
+      <p style="margin-top:6px;font-size:13px;color:var(--muted)">Ruptura limpia de 295k confirma cambio de tendencia a alcista de medio plazo.</p>
+    </div>
+  </div>
+
+  <h3>Gráfico precio 12M (esquemático)</h3>
+  <div class="chart-box"><canvas id="priceChart"></canvas></div>
+
+  <div class="alert blue">
+    <strong>Lectura técnica:</strong> Estructura de doble suelo en 240k. Resistencia clave 295-310k (zona de oferta acumulada). Por encima de 310k camino libre hacia 340-360k. Por debajo de 245k se cae a 210k y se invalida el setup.
+  </div>
+</section>
+
+<!-- ============ 7 TESIS ============ -->
+<section id="tesis">
+  <h2>Tesis de Inversión</h2>
+  <p class="lead">Krafton presenta una combinación poco habitual de <strong>calidad fundamental + valoración deprimida + catalizador binario inmediato</strong>. La tesis tiene tres patas con horizontes distintos.</p>
+
+  <div class="grid grid-3">
+    <div class="card accent">
+      <h3>1 · Corto plazo (1-3 meses)</h3>
+      <h4>"Trade del catalizador"</h4>
+      <ul class="bul">
+        <li>Subnautica 2 EA · 14 mayo (3 días)</li>
+        <li>Q2 2026 results (jul-ago): primer trimestre con Subnautica 2 y posible nuevo récord</li>
+        <li>Setup técnico de doble suelo + MACD alcista</li>
+        <li><strong>Target:</strong> 310-340.000 ₩ (+9% a +20%)</li>
+      </ul>
+    </div>
+    <div class="card blue">
+      <h3>2 · Medio plazo (6-12 meses)</h3>
+      <h4>"Re-rating del múltiplo"</h4>
+      <ul class="bul">
+        <li>EV/EBITDA 7x → 10x (mediana sector) ≈ +40-50%</li>
+        <li>Pipeline 12 lanzamientos próximos 24 meses reduce concentración PUBG</li>
+        <li>Recompras potenciales (4,3T₩ caja vs. 12,9T₩ market cap = 33% en caja)</li>
+        <li><strong>Target:</strong> 380-435.000 ₩ (consenso analistas, +34% a +53%)</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h3>3 · Largo plazo (2-5 años)</h3>
+      <h4>"Publisher global"</h4>
+      <ul class="bul">
+        <li>30+ títulos roadmap convierte a Krafton en Activision-style holding</li>
+        <li>IP múltiples (PUBG + Subnautica + inZOI + Dinkum + Palworld mobile)</li>
+        <li>Estrategia AI-First → costes por título a la baja, margen sube</li>
+        <li><strong>Target:</strong> 500-600.000 ₩ (+75% a +110%)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Calificación por dimensión</h3>
+  <table>
+    <thead><tr><th>Dimensión</th><th>Score</th><th>Notas</th></tr></thead>
+    <tbody>
+      <tr><td>Calidad del negocio</td><td><div class="score-bar"><div class="score-fill" style="width:80%"></div></div></td><td>PUBG sigue creciendo +12-32% YoY 8 años después · margen 32-41%</td></tr>
+      <tr><td>Solidez balance</td><td><div class="score-bar"><div class="score-fill" style="width:95%"></div></div></td><td>Net cash 4,3T₩ · D/E 0,5% · sin riesgo financiero</td></tr>
+      <tr><td>Valoración</td><td><div class="score-bar"><div class="score-fill" style="width:85%"></div></div></td><td>Fwd P/E 11x · EV/EBITDA 7x · descuento 30-40% vs peers</td></tr>
+      <tr><td>Crecimiento</td><td><div class="score-bar"><div class="score-fill" style="width:75%"></div></div></td><td>Q1 +57% · FY25 OP +20% · pipeline rico</td></tr>
+      <tr><td>Catalizadores</td><td><div class="score-bar"><div class="score-fill" style="width:90%"></div></div></td><td>Subnautica 2 (días) + Q2 earnings + resoluciones legales</td></tr>
+      <tr><td>Riesgo</td><td><div class="score-bar"><div class="score-fill" style="width:55%"></div></div></td><td>Concentración PUBG · litigio UW · India BGMI regulatorio</td></tr>
+      <tr><td>Liquidez stock</td><td><div class="score-bar"><div class="score-fill" style="width:70%"></div></div></td><td>KRX large cap · float adecuado · sin problemas operativos</td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert green" style="margin-top:18px">
+    <strong>Recomendación:</strong> <span class="tag green">COMPRA</span> con sesgo a "comprar el evento" y construir posición. Asimetría favorable: downside técnico claro (~13% a 245k), upside fundamental amplio (+34% a consenso, +75% a largo).
+  </div>
+</section>
+
+<!-- ============ 8 TIMING ============ -->
+<section id="timing">
+  <h2>Timing · Time in the Market vs Market Timing</h2>
+  <p class="lead">El cliché es real: <em>time in the market beats market timing</em>. Pero en una acción cíclica de videojuegos con catalizador datable, hay forma de hacer ambas cosas: <strong>core position de largo + traded position alrededor del evento</strong>.</p>
+
+  <div class="grid grid-2">
+    <div class="card blue">
+      <h3>Filosofía recomendada</h3>
+      <ul class="bul">
+        <li><strong>70% Core (time in market):</strong> Construir a estos niveles (270-290k), holdear 12-24 meses para re-rating</li>
+        <li><strong>30% Trade (market timing):</strong> Capital para promediar a la baja si cae a 245k o salir parcial en 340k</li>
+        <li>No esperar al "fondo perfecto" — el stock está a -27% desde máximo, con balance limpio y Q1 récord</li>
+        <li>Dollar-cost averaging mensual durante los próximos 3-4 meses cubre incertidumbre del lanzamiento</li>
+      </ul>
+    </div>
+    <div class="card accent">
+      <h3>Plan de entrada propuesto</h3>
+      <ul class="bul">
+        <li><strong>Tramo 1 (40%)</strong> · Compra inmediata 280-290k — captura el catalizador</li>
+        <li><strong>Tramo 2 (30%)</strong> · Compra si retesta 260-270k (entrada equilibrada)</li>
+        <li><strong>Tramo 3 (30%)</strong> · Reserva para 240-250k (compra agresiva si soporte fuerte)</li>
+        <li>Si el stock rompe 310k sin tocar 260k, se completa la posición con un tramo de "compra de fuerza"</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Tabla operativa · niveles, TP y SL</h3>
+  <table>
+    <thead><tr><th>Concepto</th><th class="num">Precio (₩)</th><th class="num">% vs spot</th><th>Acción</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(239,68,68,.06)"><td><strong>Stop Loss estructural</strong></td><td class="num">208.500</td><td class="num">-26,6%</td><td>Cierre completo · invalida tesis</td></tr>
+      <tr style="background:rgba(239,68,68,.04)"><td>Stop Loss técnico (corto plazo)</td><td class="num">245.000</td><td class="num">-13,7%</td><td>Reducir 50% si rompe con volumen</td></tr>
+      <tr style="background:rgba(34,197,94,.05)"><td><strong>Zona de compra agresiva</strong></td><td class="num">240.000 - 260.000</td><td class="num">-15% / -8,5%</td><td>Tramo 3 (30%)</td></tr>
+      <tr style="background:rgba(34,197,94,.05)"><td>Zona de compra equilibrada</td><td class="num">260.000 - 275.000</td><td class="num">-8,5% / -3,2%</td><td>Tramo 2 (30%)</td></tr>
+      <tr style="background:rgba(255,122,26,.08)"><td><strong>Precio actual (cierre 11 May)</strong></td><td class="num">285.000</td><td class="num">0%</td><td>Tramo 1 (40%)</td></tr>
+      <tr style="background:rgba(34,197,94,.05)"><td>Confirmación tendencia alcista</td><td class="num">310.000</td><td class="num">+9,2%</td><td>TP1 · vender 25%</td></tr>
+      <tr style="background:rgba(34,197,94,.08)"><td><strong>Target conservador</strong></td><td class="num">358.000</td><td class="num">+26,1%</td><td>TP2 · vender 25% (target medio bajo)</td></tr>
+      <tr style="background:rgba(34,197,94,.1)"><td><strong>Target base consenso</strong></td><td class="num">435.000</td><td class="num">+53,2%</td><td>TP3 · vender 30% (target medio analistas)</td></tr>
+      <tr style="background:rgba(168,85,247,.1)"><td>Target alcista</td><td class="num">500.000+</td><td class="num">+76%+</td><td>TP4 · mantener 20% para escenario bull</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Risk/Reward</h3>
+  <div class="grid grid-3">
+    <div class="card red">
+      <h4>Downside (SL estructural)</h4>
+      <p style="font-size:30px;font-weight:800;color:#f87171">-26,6%</p>
+      <p style="font-size:12px;color:var(--muted)">Probabilidad estimada: ~20%</p>
+    </div>
+    <div class="card yellow">
+      <h4>Caso base (target consenso)</h4>
+      <p style="font-size:30px;font-weight:800;color:#facc15">+53,2%</p>
+      <p style="font-size:12px;color:var(--muted)">Probabilidad estimada: ~50%</p>
+    </div>
+    <div class="card green">
+      <h4>Upside (caso alcista)</h4>
+      <p style="font-size:30px;font-weight:800;color:#4ade80">+76% a +110%</p>
+      <p style="font-size:12px;color:var(--muted)">Probabilidad estimada: ~30%</p>
+    </div>
+  </div>
+
+  <div class="alert green">
+    <strong>Risk/Reward esperado:</strong> Esperanza matemática positiva. <br>
+    E[R] = 0,20 × (-26,6%) + 0,50 × (+53,2%) + 0,30 × (+90%) ≈ <strong>+48,3%</strong> a 12 meses.
+  </div>
+
+  <h3>Reglas de gestión</h3>
+  <ul class="bul">
+    <li><strong>Position sizing:</strong> No más del 5-7% del portfolio total (es single-stock single-country single-IP-concentrated)</li>
+    <li><strong>FX:</strong> Considerar hedge KRW/EUR si la posición supera 10k€ (won muy débil ahora puede revertir si BoK sube tipos)</li>
+    <li><strong>Revisión:</strong> Después de Q2 2026 earnings (julio-agosto), revisar tesis con Subnautica 2 ya monetizando</li>
+    <li><strong>Stop dinámico:</strong> Tras TP1 (310k), subir SL a breakeven. Tras TP2 (358k), trailing stop al 15%</li>
+    <li><strong>Sobre Subnautica 2 launch:</strong> Si concurrent peak Steam &lt; 50.000 día 1, reducir 25% posición (señal de hype no convertido)</li>
+  </ul>
+
+  <div class="disclaimer">
+    <strong>Disclaimer:</strong> Este dossier es análisis financiero educativo, no asesoramiento de inversión. Datos a 11 mayo 2026 obtenidos de Yahoo Finance, StockAnalysis, GuruFocus, MarketScreener, Krafton IR, Bank of Korea, Bloomberg, CNBC, Korea Herald, Inven Global, Steam y prensa especializada. Las inversiones en renta variable conllevan riesgo de pérdida total. Verificar precios en tiempo real antes de operar.
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p><strong>KRAFTON · Dossier de Inversión</strong> · Análisis a 11 mayo 2026</p>
+    <p>Fuentes: <a href="https://www.krafton.com/en/ir/" target="_blank">Krafton IR</a> · <a href="https://finance.yahoo.com/quote/259960.KS/" target="_blank">Yahoo Finance</a> · <a href="https://stockanalysis.com/quote/krx/259960/" target="_blank">StockAnalysis</a> · <a href="https://www.bok.or.kr/eng/main/main.do" target="_blank">Bank of Korea</a> · <a href="https://www.tradingview.com/symbols/KRX-259960/" target="_blank">TradingView</a></p>
+    <p style="margin-top:10px">Dossier construido por <a href="https://claude.com/claude-code" target="_blank">Claude Code</a> · Mayo 2026</p>
+  </div>
+</footer>
+
+<script>
+// Tab switching
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+// Chart.js global config
+Chart.defaults.color = '#8a95ac';
+Chart.defaults.borderColor = '#243049';
+Chart.defaults.font.family = '-apple-system, Segoe UI, Roboto, sans-serif';
+
+// 1. Mix Q1 2026
+new Chart(document.getElementById('mixChart'),{
+  type:'doughnut',
+  data:{
+    labels:['PUBG Mobile + BGMI','PUBG PC/Console','China royalty + Otros (inZOI, Callisto, …)'],
+    datasets:[{
+      data:[702.7, 363.9, 303.4],
+      backgroundColor:['#ff7a1a','#ffb347','#3b82f6'],
+      borderColor:'#141b2d',borderWidth:3
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'right',labels:{padding:14,font:{size:13}}},
+      tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed} B₩ (${(c.parsed/13.7).toFixed(0)}%)`}}
+    }
+  }
+});
+
+// 2. Revenue evolution
+new Chart(document.getElementById('revChart'),{
+  type:'bar',
+  data:{
+    labels:['2021','2022','2023','2024','2025','2026E'],
+    datasets:[{
+      label:'Revenue anual (B₩)',
+      data:[1888, 1855, 1932, 2710, 3327, 5200],
+      backgroundColor:['#3b82f6','#3b82f6','#3b82f6','#ffb347','#ff7a1a','rgba(255,122,26,.5)'],
+      borderRadius:6
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{y:{grid:{color:'#243049'}},x:{grid:{display:false}}}
+  }
+});
+
+// 3. KOSPI vs Krafton (rebased)
+new Chart(document.getElementById('macroChart'),{
+  type:'line',
+  data:{
+    labels:['May25','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene26','Feb','Mar','Abr','May26'],
+    datasets:[
+      {label:'KOSPI (rebased 100)',data:[100,102,99,103,108,112,118,125,138,148,162,180,201],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.1)',tension:.35,fill:true,borderWidth:2.5},
+      {label:'Krafton (rebased 100)',data:[100,105,112,118,135,142,138,128,115,108,98,102,109],borderColor:'#ff7a1a',backgroundColor:'rgba(255,122,26,.1)',tension:.35,fill:true,borderWidth:2.5}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'}},
+    scales:{y:{grid:{color:'#243049'},title:{display:true,text:'Índice rebased = 100'}},x:{grid:{display:false}}}
+  }
+});
+
+// 4. Analyst targets
+new Chart(document.getElementById('analystChart'),{
+  type:'bar',
+  data:{
+    labels:['Mínimo','Medio bajo','Medio (consenso)','Medio alto','Máximo'],
+    datasets:[{
+      label:'Target analistas (₩)',
+      data:[310000, 358000, 435074, 510000, 588000],
+      backgroundColor:['#ef4444','#eab308','#ff7a1a','#22c55e','#a855f7'],
+      borderRadius:6
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:c=>` ${c.parsed.x.toLocaleString()} ₩ (${((c.parsed.x/285000-1)*100).toFixed(1)}% vs spot)`}}
+    },
+    scales:{x:{grid:{color:'#243049'},ticks:{callback:v=>(v/1000)+'k'}},y:{grid:{display:false}}}
+  }
+});
+
+// 5. Price chart 12M (esquemático con niveles clave)
+new Chart(document.getElementById('priceChart'),{
+  type:'line',
+  data:{
+    labels:['May25','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene26','Feb','Mar','Abr','May26'],
+    datasets:[
+      {label:'Precio Krafton (₩)',data:[280000,295000,315000,335000,381000,391000,360000,335000,295000,275000,245000,265000,285000],borderColor:'#ff7a1a',backgroundColor:'rgba(255,122,26,.12)',tension:.3,fill:true,borderWidth:3,pointRadius:4,pointBackgroundColor:'#ffb347'},
+      {label:'Resistencia (310k)',data:Array(13).fill(310000),borderColor:'#ef4444',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false},
+      {label:'Soporte (245k)',data:Array(13).fill(245000),borderColor:'#22c55e',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'}},
+    scales:{y:{grid:{color:'#243049'},ticks:{callback:v=>(v/1000)+'k ₩'}},x:{grid:{display:false}}}
+  }
+});
+</script>
+</body>
+</html>
